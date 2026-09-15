@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TaskFlow | Productivity Manager</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #f4f8f7;
+            color: #183b3a;
+            transition: 0.3s;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            height: 72px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #0f766e;
+        }
+
+        .logo span {
+            color: #f97316;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #526463;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .nav-links a:hover {
+            color: #0f766e;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            border: none;
+            background: #e5f5f2;
+            color: #0f766e;
+            padding: 10px 15px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .profile-btn {
+            border: none;
+            background: #0f766e;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* HERO */
+
+        .hero {
+            padding: 70px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 500px;
+            background:
+                radial-gradient(circle at 85% 30%, #bce8df 0, transparent 30%),
+                linear-gradient(135deg, #f6fbfa, #edf8f5);
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #dff5ef;
+            color: #0f766e;
+            padding: 9px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 54px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #f97316;
+        }
+
+        .hero p {
+            color: #647372;
+            font-size: 17px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .primary-btn {
+            background: #0f766e;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .secondary-btn {
+            background: white;
+            color: #0f766e;
+            padding: 14px 24px;
+            border-radius: 10px;
+            border: 1px solid #cde2df;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* PRODUCTIVITY CARD */
+
+        .productivity-card {
+            width: 390px;
+            background: white;
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 20px 50px rgba(15,118,110,0.15);
+        }
+
+        .productivity-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .productivity-header h3 {
+            font-size: 20px;
+        }
+
+        .percentage {
+            color: #0f766e;
+            font-weight: bold;
+        }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #e5efed;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .progress-bar {
+            width: 72%;
+            height: 100%;
+            background: #0f766e;
+            border-radius: 20px;
+        }
+
+        .mini-task {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid #edf1f0;
+        }
+
+        .check {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #0f766e;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .check.pending {
+            background: #fff1e7;
+            color: #f97316;
+        }
+
+        .mini-task p {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .mini-task small {
+            color: #899695;
+        }
+
+        /* GENERAL SECTION */
+
+        section {
+            padding: 75px 8%;
+        }
+
+        .section-title {
+            margin-bottom: 30px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .section-title p {
+            color: #71807f;
+        }
+
+        /* DASHBOARD */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 17px;
+            box-shadow: 0 6px 25px rgba(20,70,65,0.06);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            background: #e5f5f2;
+            color: #0f766e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .stat-card h2 {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #778584;
+            font-size: 13px;
+        }
+
+        .orange {
+            background: #fff0e5;
+            color: #f97316;
+        }
+
+        /* TASK SECTION */
+
+        .task-area {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        .task-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 6px 25px rgba(20,70,65,0.06);
+        }
+
+        .search {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search input {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #dce8e6;
+            border-radius: 9px;
+            outline: none;
+        }
+
+        .search button {
+            background: #0f766e;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+
+        .task-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .task-filter {
+            border: 1px solid #dce8e6;
+            background: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            color: #5c6c6a;
+        }
+
+        .task-filter.active,
+        .task-filter:hover {
+            background: #0f766e;
+            color: white;
+        }
+
+        /* TASK CARD */
+
+        .task-card {
+            border: 1px solid #e6eeee;
+            padding: 18px;
+            border-radius: 13px;
+            margin-bottom: 12px;
+            transition: 0.2s;
+        }
+
+        .task-card:hover {
+            border-color: #b6d9d4;
+            transform: translateX(3px);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-header h3 {
+            font-size: 16px;
+        }
+
+        .priority {
+            font-size: 10px;
+            padding: 5px 9px;
+            border-radius: 15px;
+            background: #fff0e5;
+            color: #f97316;
+            font-weight: bold;
+        }
+
+        .priority.low {
+            background: #e5f5f2;
+            color: #0f766e;
+        }
+
+        .task-card p {
+            color: #7b8988;
+            font-size: 13px;
+            margin: 10px 0;
+        }
+
+        .task-bottom {
+            display: flex;
+            justify-content: space-between;
+            color: #899695;
+            font-size: 12px;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        /* RIGHT PANEL */
+
+        .add-task {
+            background: #183b3a;
+            color: white;
+            border-radius: 20px;
+            padding: 27px;
+        }
+
+        .add-task h2 {
+            margin-bottom: 10px;
+        }
+
+        .add-task p {
+            color: #b5c7c5;
+            line-height: 1.6;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .add-task input,
+        .add-task select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .add-task button {
+            width: 100%;
+            padding: 13px;
+            background: #f97316;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* DEADLINES */
+
+        .deadlines {
+            background: #fff8f2;
+        }
+
+        .deadline-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .deadline {
+            background: white;
+            padding: 23px;
+            border-radius: 17px;
+            border-left: 5px solid #f97316;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .deadline h3 {
+            margin-bottom: 10px;
+        }
+
+        .deadline p {
+            color: #7b8988;
+            font-size: 13px;
+        }
+
+        .deadline-date {
+            margin-top: 15px;
+            color: #f97316;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* HABITS */
+
+        .habit-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .habit {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(20,70,65,0.05);
+        }
+
+        .habit h3 {
+            margin-bottom: 10px;
+        }
+
+        .habit p {
+            color: #7b8988;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .habit-progress {
+            height: 8px;
+            background: #e7efed;
+            border-radius: 20px;
+        }
+
+        .habit-progress div {
+            height: 100%;
+            background: #0f766e;
+            border-radius: 20px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #183b3a;
+            color: white;
+            padding: 55px 8% 25px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        footer h3 {
+            margin-bottom: 15px;
+        }
+
+        footer p {
+            color: #afc3c1;
+            line-height: 1.7;
+        }
+
+        footer ul {
+            list-style: none;
+        }
+
+        footer li {
+            color: #afc3c1;
+            margin-bottom: 10px;
+        }
+
+        footer li:hover {
+            color: white;
+        }
+
+        .copyright {
+            border-top: 1px solid #365654;
+            padding-top: 20px;
+            text-align: center;
+            color: #91a8a5;
+            font-size: 13px;
+        }
+
+        /* MODAL */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            padding: 20px;
+        }
+
+        .modal-box {
+            width: 450px;
+            max-width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+        }
+
+        .modal-box h2 {
+            margin-bottom: 12px;
+        }
+
+        .modal-box p {
+            color: #6f7d7c;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            float: right;
+            border: none;
+            background: none;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        /* DARK MODE */
+
+        body.dark {
+            background: #101c1b;
+            color: #eef7f5;
+        }
+
+        body.dark nav,
+        body.dark .productivity-card,
+        body.dark .stat-card,
+        body.dark .task-panel,
+        body.dark .task-card,
+        body.dark .habit,
+        body.dark .deadline,
+        body.dark .modal-box,
+        body.dark .secondary-btn,
+        body.dark .task-filter {
+            background: #1b2b2a;
+            color: white;
+        }
+
+        body.dark .nav-links a,
+        body.dark .hero p,
+        body.dark .section-title p,
+        body.dark .stat-card p,
+        body.dark .task-card p,
+        body.dark .habit p,
+        body.dark .deadline p {
+            color: #a9bbb9;
+        }
+
+        body.dark .hero {
+            background: linear-gradient(135deg, #142321, #19302e);
+        }
+
+        body.dark .search input,
+        body.dark .add-task input,
+        body.dark .add-task select {
+            background: #263a38;
+            color: white;
+            border-color: #3c5350;
+        }
+
+        body.dark .deadlines {
+            background: #172321;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 1000px) {
+
+            .hero {
+                flex-direction: column;
+                gap: 50px;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .task-area {
+                grid-template-columns: 1fr;
+            }
+
+            .deadline-grid,
+            .habit-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media(max-width: 700px) {
+
+            nav {
+                padding: 0 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 60px 6%;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .productivity-card {
+                width: 100%;
+            }
+
+            section {
+                padding: 60px 6%;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .search {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVIGATION -->
+
+<nav>
+
+    <div class="logo">
+        Task<span>Flow</span>
+    </div>
+
+    <ul class="nav-links">
+
+        <li>
+            <a href="#home">Home</a>
+        </li>
+
+        <li>
+            <a href="#dashboard">Dashboard</a>
+        </li>
+
+        <li>
+            <a href="#tasks">Tasks</a>
+        </li>
+
+        <li>
+            <a href="#deadlines">Deadlines</a>
+        </li>
+
+        <li>
+            <a href="#habits">Habits</a>
+        </li>
+
+    </ul>
+
+    <div class="nav-actions">
+
+        <button class="theme-btn" onclick="toggleTheme()">
+            Theme
+        </button>
+
+        <button class="profile-btn" onclick="showProfile()">
+            Profile
+        </button>
+
+    </div>
+
+</nav>
+
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <div class="badge">
+            PERSONAL PRODUCTIVITY
+        </div>
+
+        <h1>
+            Organize your work.
+            <span>Achieve more.</span>
+        </h1>
+
+        <p>
+            TaskFlow helps you organize daily tasks,
+            manage deadlines, track progress and build
+            productive habits from one simple dashboard.
+        </p>
+
+        <div class="hero-buttons">
+
+            <button
+                class="primary-btn"
+                onclick="document.getElementById('tasks').scrollIntoView()">
+                Manage Tasks
+            </button>
+
+            <button
+                class="secondary-btn"
+                onclick="showQuickStart()">
+                Quick Start
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- PRODUCTIVITY CARD -->
+
+    <div class="productivity-card">
+
+        <div class="productivity-header">
+
+            <h3>Today's Progress</h3>
+
+            <span class="percentage">
+                72%
+            </span>
+
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar"></div>
+        </div>
+
+
+        <div class="mini-task">
+
+            <div class="check">
+                ✓
+            </div>
+
+            <div>
+                <p>Complete project report</p>
+                <small>Completed</small>
+            </div>
+
+        </div>
+
+
+        <div class="mini-task">
+
+            <div class="check">
+                ✓
+            </div>
+
+            <div>
+                <p>Study Java programming</p>
+                <small>Completed</small>
+            </div>
+
+        </div>
+
+
+        <div class="mini-task">
+
+            <div class="check pending">
+                !
+            </div>
+
+            <div>
+                <p>Prepare presentation</p>
+                <small>Pending</small>
+            </div>
+
+        </div>
+
+
+        <div class="mini-task">
+
+            <div class="check pending">
+                !
+            </div>
+
+            <div>
+                <p>Read documentation</p>
+                <small>Pending</small>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- DASHBOARD -->
+
+<section id="dashboard">
+
+    <div class="section-title">
+
+        <h2>Productivity Dashboard</h2>
+
+        <p>
+            Get a quick overview of your daily productivity.
+        </p>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    ALL
+                </div>
+
+            </div>
+
+            <h2 id="totalTasks">
+                24
+            </h2>
+
+            <p>Total Tasks</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    OK
+                </div>
+
+            </div>
+
+            <h2>
+                16
+            </h2>
+
+            <p>Completed</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon orange">
+                    !
+                </div>
+
+            </div>
+
+            <h2>
+                8
+            </h2>
+
+            <p>Pending Tasks</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon">
+                    %
+                </div>
+
+            </div>
+
+            <h2>
+                72%
+            </h2>
+
+            <p>Completion Rate</p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- TASK MANAGEMENT -->
+
+<section id="tasks">
+
+    <div class="section-title">
+
+        <h2>Task Management</h2>
+
+        <p>
+            Manage your tasks and keep your work organized.
+        </p>
+
+    </div>
+
+
+    <div class="task-area">
+
+
+        <div class="task-panel">
+
+            <div class="search">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search tasks..."
+                    onkeyup="searchTasks()"
+                >
+
+                <button onclick="searchTasks()">
+                    Search
+                </button>
+
+            </div>
+
+
+            <div class="task-filters">
+
+                <button
+                    class="task-filter active"
+                    onclick="filterTasks('all',this)">
+                    All
+                </button>
+
+                <button
+                    class="task-filter"
+                    onclick="filterTasks('work',this)">
+                    Work
+                </button>
+
+                <button
+                    class="task-filter"
+                    onclick="filterTasks('study',this)">
+                    Study
+                </button>
+
+                <button
+                    class="task-filter"
+                    onclick="filterTasks('personal',this)">
+                    Personal
+                </button>
+
+            </div>
+
+
+            <!-- TASK 1 -->
+
+            <div
+                class="task-card"
+                data-category="work">
+
+                <div class="task-header">
+
+                    <h3>
+                        Complete Project Report
+                    </h3>
+
+                    <span class="priority">
+                        HIGH
+                    </span>
+
+                </div>
+
+                <p>
+                    Complete documentation and final report
+                    for the current project.
+                </p>
+
+                <div class="task-bottom">
+
+                    <span>
+                        Work
+                    </span>
+
+                    <span>
+                        Due Today
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- TASK 2 -->
+
+            <div
+                class="task-card"
+                data-category="study">
+
+                <div class="task-header">
+
+                    <h3>
+                        Study Java Programming
+                    </h3>
+
+                    <span class="priority low">
+                        LOW
+                    </span>
+
+                </div>
+
+                <p>
+                    Practice Java collections and object-oriented
+                    programming concepts.
+                </p>
+
+                <div class="task-bottom">
+
+                    <span>
+                        Study
+                    </span>
+
+                    <span>
+                        Due Tomorrow
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- TASK 3 -->
+
+            <div
+                class="task-card"
+                data-category="personal">
+
+                <div class="task-header">
+
+                    <h3>
+                        Plan Weekly Schedule
+                    </h3>
+
+                    <span class="priority">
+                        MEDIUM
+                    </span>
+
+                </div>
+
+                <p>
+                    Prepare a schedule for upcoming academic
+                    and personal activities.
+                </p>
+
+                <div class="task-bottom">
+
+                    <span>
+                        Personal
+                    </span>
+
+                    <span>
+                        Friday
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- TASK 4 -->
+
+            <div
+                class="task-card"
+                data-category="work">
+
+                <div class="task-header">
+
+                    <h3>
+                        Prepare Presentation
+                    </h3>
+
+                    <span class="priority">
+                        HIGH
+                    </span>
+
+                </div>
+
+                <p>
+                    Prepare slides and presentation material
+                    for the upcoming seminar.
+                </p>
+
+                <div class="task-bottom">
+
+                    <span>
+                        Work
+                    </span>
+
+                    <span>
+                        Saturday
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADD TASK -->
+
+        <div class="add-task">
+
+            <h2>
+                Create New Task
+            </h2>
+
+            <p>
+                Add a new task to your productivity dashboard.
+            </p>
+
+            <input
+                type="text"
+                id="newTask"
+                placeholder="Task name"
+            >
+
+            <select id="taskCategory">
+
+                <option value="work">
+                    Work
+                </option>
+
+                <option value="study">
+                    Study
+                </option>
+
+                <option value="personal">
+                    Personal
+                </option>
+
+            </select>
+
+            <button onclick="addTask()">
+                Add Task
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- DEADLINES -->
+
+<section class="deadlines" id="deadlines">
+
+    <div class="section-title">
+
+        <h2>Upcoming Deadlines</h2>
+
+        <p>
+            Keep track of important upcoming work.
+        </p>
+
+    </div>
+
+
+    <div class="deadline-grid">
+
+
+        <div class="deadline">
+
+            <h3>
+                Project Submission
+            </h3>
+
+            <p>
+                Final project documentation must be submitted.
+            </p>
+
+            <div class="deadline-date">
+                September 18, 2026
+            </div>
+
+        </div>
+
+
+        <div class="deadline">
+
+            <h3>
+                Seminar Presentation
+            </h3>
+
+            <p>
+                Presentation slides and preparation.
+            </p>
+
+            <div class="deadline-date">
+                September 22, 2026
+            </div>
+
+        </div>
+
+
+        <div class="deadline">
+
+            <h3>
+                Assignment Submission
+            </h3>
+
+            <p>
+                Submit the upcoming academic assignment.
+            </p>
+
+            <div class="deadline-date">
+                September 26, 2026
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- HABITS -->
+
+<section id="habits">
+
+    <div class="section-title">
+
+        <h2>Productive Habits</h2>
+
+        <p>
+            Track the habits that help you stay productive.
+        </p>
+
+    </div>
+
+
+    <div class="habit-grid">
+
+
+        <div class="habit">
+
+            <h3>
+                Daily Study
+            </h3>
+
+            <p>
+                Maintain a consistent daily learning routine.
+            </p>
+
+            <div class="habit-progress">
+                <div style="width:85%;"></div>
+            </div>
+
+        </div>
+
+
+        <div class="habit">
+
+            <h3>
+                Reading
+            </h3>
+
+            <p>
+                Spend time reading technical documentation.
+            </p>
+
+            <div class="habit-progress">
+                <div style="width:68%;"></div>
+            </div>
+
+        </div>
+
+
+        <div class="habit">
+
+            <h3>
+                Exercise
+            </h3>
+
+            <p>
+                Maintain a healthy and active daily routine.
+            </p>
+
+            <div class="habit-progress">
+                <div style="width:74%;"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="footer-grid">
+
+
+        <div>
+
+            <h3>
+                TaskFlow
+            </h3>
+
+            <p>
+                A simple productivity application designed
+                to help users organize tasks, deadlines and
+                daily activities.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <h3>
+                Product
+            </h3>
+
+            <ul>
+
+                <li>
+                    Dashboard
+                </li>
+
+                <li>
+                    Tasks
+                </li>
+
+                <li>
+                    Deadlines
+                </li>
+
+                <li>
+                    Habits
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div>
+
+            <h3>
+                Resources
+            </h3>
+
+            <ul>
+
+                <li>
+                    Help
+                </li>
+
+                <li>
+                    Guide
+                </li>
+
+                <li>
+                    Documentation
+                </li>
+
+                <li>
+                    Feedback
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div>
+
+            <h3>
+                Account
+            </h3>
+
+            <ul>
+
+                <li>
+                    Profile
+                </li>
+
+                <li>
+                    Settings
+                </li>
+
+                <li>
+                    Preferences
+                </li>
+
+                <li>
+                    Logout
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+        © 2026 TaskFlow. All rights reserved.
+
+    </div>
+
+</footer>
+
+
+<!-- MODAL -->
+
+<div class="modal" id="modal">
+
+    <div class="modal-box">
+
+        <button
+            class="close"
+            onclick="closeModal()">
+            ×
+        </button>
+
+        <h2 id="modalTitle">
+            Welcome
+        </h2>
+
+        <p id="modalText">
+            Welcome to TaskFlow.
+        </p>
+
+        <button
+            class="primary-btn"
+            onclick="closeModal()">
+            Continue
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* THEME */
+
+function toggleTheme() {
+
+    document.body.classList.toggle("dark");
+
+}
+
+
+/* SEARCH TASKS */
+
+function searchTasks() {
+
+    let input =
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    let tasks =
+        document.querySelectorAll(".task-card");
+
+    tasks.forEach(function(task) {
+
+        let text =
+            task.innerText.toLowerCase();
+
+        if(text.includes(input)) {
+
+            task.style.display = "block";
+
+        }
+        else {
+
+            task.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+/* FILTER */
+
+function filterTasks(category, button) {
+
+    let tasks =
+        document.querySelectorAll(".task-card");
+
+    let buttons =
+        document.querySelectorAll(".task-filter");
+
+    buttons.forEach(function(btn) {
+
+        btn.classList.remove("active");
+
+    });
+
+    button.classList.add("active");
+
+
+    tasks.forEach(function(task) {
+
+        if(category === "all") {
+
+            task.style.display = "block";
+
+        }
+        else if(task.dataset.category === category) {
+
+            task.style.display = "block";
+
+        }
+        else {
+
+            task.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+/* ADD TASK */
+
+function addTask() {
+
+    let taskName =
+        document.getElementById("newTask").value;
+
+    let category =
+        document.getElementById("taskCategory").value;
+
+
+    if(taskName.trim() === "") {
+
+        alert("Please enter a task name.");
+
+        return;
+
+    }
+
+
+    let taskPanel =
+        document.querySelector(".task-panel");
+
+
+    let task =
+        document.createElement("div");
+
+    task.className = "task-card";
+
+    task.dataset.category = category;
+
+
+    task.innerHTML = `
+
+        <div class="task-header">
+
+            <h3>${taskName}</h3>
+
+            <span class="priority">
+                NEW
+            </span>
+
+        </div>
+
+        <p>
+            Newly created task.
+        </p>
+
+        <div class="task-bottom">
+
+            <span>
+                ${category}
+            </span>
+
+            <span>
+                New Task
+            </span>
+
+        </div>
+
+    `;
+
+
+    taskPanel.appendChild(task);
+
+
+    document.getElementById("newTask").value = "";
+
+
+    alert("Task added successfully.");
+
+}
+
+
+/* PROFILE */
+
+function showProfile() {
+
+    document.getElementById("modalTitle").innerText =
+        "User Profile";
+
+    document.getElementById("modalText").innerText =
+        "This demo profile contains your productivity information, tasks and personal preferences.";
+
+    document.getElementById("modal").style.display =
+        "flex";
+
+}
+
+
+/* QUICK START */
+
+function showQuickStart() {
+
+    document.getElementById("modalTitle").innerText =
+        "Quick Start";
+
+    document.getElementById("modalText").innerText =
+        "Start by creating a task, selecting its category and tracking your progress from the dashboard.";
+
+    document.getElementById("modal").style.display =
+        "flex";
+
+}
+
+
+/* CLOSE MODAL */
+
+function closeModal() {
+
+    document.getElementById("modal").style.display =
+        "none";
+
+}
+
+
+/* OUTSIDE CLICK */
+
+window.onclick = function(event) {
+
+    let modal =
+        document.getElementById("modal");
+
+    if(event.target === modal) {
+
+        modal.style.display = "none";
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>
